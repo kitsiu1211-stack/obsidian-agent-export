@@ -5,35 +5,43 @@ tags: [meta, agent-access]
 updated: 2026-11-16
 ---
 
-# 外部 Agent 读法（本仓只读）
+# 外部 Agent 读法
 
-本仓是 Obsidian 主库（`~/Documents/Obsidian Vault`）的 GitHub 镜像，**只读**。任何 Agent（豆包工作伙伴 Mark、Claude Code、Codex、其他数字员工）都可以直接读，不需要设备授权。
+本库对外有两个出口，**读之前先看自己在哪条路上**：
 
-## 目录
+| 仓 | 可见性 | 内容 | 谁能读 |
+|---|---|---|---|
+| `kitsiu1211-stack/obsidian-project-hub` | **private** | 全量主库（concepts / docs / builders / clients / reviews / raw / AI场景 / Projects） | 袁鑫杰、Hermes（浪子）、Koa 等被授权的身份 |
+| `kitsiu1211-stack/obsidian-agent-export` | **public** | 只有 `index.md` + `concepts/` + `docs/` + `builders/` + `SCHEMA.md` | 任何人，含 Mark 等云端 Agent |
 
-| 路径 | 内容 |
-|---|---|
-| `index.md` | 总索引，含页数与最近更新 |
-| `concepts/` | 概念笔记。**命名铁律：`主题N-标题.md`，编号 = 当前最大编号 + 1** |
-| `docs/` | 方法论与说明 |
-| `builders/` | 人/组织相关笔记 |
-| `clients/` | 客户档案 |
-| `reviews/` | 周复盘 |
-| `raw/` | 原始记录（会议/文章摘录） |
-| `assets/` | 图片 |
-| `SCHEMA.md` / `log.md` | 库结构与变更日志 |
+两个仓都是**只读快照**，主库改了不会实时变：公开导出仓每天 08:00 同步一次（`~/.hermes/scripts/agent_export_sync.sh`），私有主库随手动 push 更新。
 
-单篇笔记结构固定四段：`## Compiled Truth` / `## 关键要点` / `## 关联主题` / `## Timeline`。`[[wikilink]]` 是库内交叉引用，按文件名匹配。
+## 公开导出仓怎么读（Mark 走这条）
 
-## 怎么读
+1. 先取 `README.md` 看白名单与规则，再取 `index.md` 定位主题，最后按需读单篇 —— **不要整库 dump**。
+2. 单文件原文：`https://raw.githubusercontent.com/kitsiu1211-stack/obsidian-agent-export/main/<path>`
+3. 列目录 / 批量取：`https://api.github.com/repos/kitsiu1211-stack/obsidian-agent-export/contents/<dir>`（未认证限 60 次/小时）
+4. 导出时客户/企业名按 `~/.hermes/scripts/export_anonymize.tsv` 替换成「某 + 行业 + 企业」，所以你看到的不是真名；引用时保留这个匿名说法。
 
-1. 先取 `index.md` 定位主题，再按需读单篇——不要整库 dump（`concepts/_weekly-reads.md` 25KB+，全库 100+ 篇）。
-2. 单文件原文：`https://raw.githubusercontent.com/kitsiu1211-stack/obsidian-project-hub/main/<path>`
-3. 列目录 / 批量取：`https://api.github.com/repos/kitsiu1211-stack/obsidian-project-hub/contents/<dir>`（未认证限 60 次/小时）
-4. 仓库是 git 快照，主库更新后（通常每天）才变。回答里要注明依据的文件路径与该文件 `updated` 字段。
+## 私有主库怎么读（Koa / 有授权的身份）
 
-## 怎么不读 / 不写
+私有仓不能用 `raw.githubusercontent.com` 匿名拉，必须带 token：
 
-- **只读**：不要 push、不要建 PR、不要改文件、不要建分支。
-- 要沉淀新内容：发到群里交给「浪子 / Mark 42」，或开 issue 说明要点，由主库侧合并后再同步。
-- `clients/`、`reviews/`、`raw/` 含客户信息与内部复盘：引用时按「某 + 行业 + 企业」匿名化，不外发原文与全文摘录。
+```
+curl -H "Authorization: Bearer $GITHUB_TOKEN" \
+     -H "Accept: application/vnd.github.raw" \
+     https://api.github.com/repos/kitsiu1211-stack/obsidian-project-hub/contents/<path>
+```
+
+读法同上：先 `index.md`，再按需读单篇。`clients/`、`reviews/`、`raw/` 含客户信息与内部复盘，引用一律匿名化，原文不外发。
+
+## 命名与结构铁律
+
+- `concepts/主题N-标题.md`，**N = 当前最大编号 + 1**，不复用旧号。
+- 单篇固定四段：`## Compiled Truth` / `## 关键要点` / `## 关联主题` / `## Timeline`。
+- `[[wikilink]]` 是库内交叉引用，按文件名匹配。
+
+## 不写
+
+- **只读**：不 push、不建 PR、不改文件、不建分支。
+- 要沉淀新内容：发到群里交给「浪子 / Mark 42」，或按 `_inbox/README.md` 的约定投进 `_inbox/`（只有主库侧能写），由主库合并后下次同步才出现在公开仓。
