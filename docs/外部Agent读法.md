@@ -12,9 +12,9 @@ updated: 2026-11-16
 | 仓 | 可见性 | 内容 | 谁能读 |
 |---|---|---|---|
 | `kitsiu1211-stack/obsidian-project-hub` | **private** | 全量主库（concepts / docs / builders / clients / reviews / raw / AI场景 / Projects） | 袁鑫杰、Hermes（浪子）、Koa 等被授权的身份 |
-| `kitsiu1211-stack/obsidian-agent-export` | **public** | 只有 `index.md` + `concepts/` + `docs/` + `builders/` + `SCHEMA.md` | 任何人，含 Mark 等云端 Agent |
+| `kitsiu1211-stack/obsidian-agent-export` | **public** | 白名单：`index.md` `SCHEMA.md` `人机协作范式.md` + `concepts/` `docs/` `builders/` `assets/` `AI培训/` `AI工具与框架/` | 任何人，含 Mark 等云端 Agent |
 
-两个仓都是**只读快照**，主库改了不会实时变：公开导出仓每天 08:00 同步一次（`~/.hermes/scripts/agent_export_sync.sh`），私有主库随手动 push 更新。
+两个仓都是**只读快照**，主库改了不会实时变：公开导出仓每天 08:00 同步一次（`~/.hermes/scripts/obsidian_agent_export.sh`，双出口：本地全量快照 + 公开仓），私有主库随手动 push 更新。raw.githubusercontent.com 有几分钟 CDN 缓存，刚推完读到的可能还是上一版。
 
 ## 公开导出仓怎么读（Mark 走这条）
 
